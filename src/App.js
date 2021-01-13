@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import './App.css';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPhoneSquareAlt} from '@fortawesome/free-solid-svg-icons'
+import {faStar} from '@fortawesome/free-solid-svg-icons'
 
 const staticShelters = [
     {
@@ -60,7 +61,7 @@ function App() {
                             flexDirection: 'column',
                             textAlign: 'left',
                         }}>
-                            <div>{shelter.name}: {shelter.rating}</div>
+                            <div style={{display: 'flex', alignItems: 'center'}}>{shelter.name}: {shelter.rating}<FontAwesomeIcon icon={faStar} size={"xs"}/></div>
                             <div style={{display: 'flex', alignItems: 'center'}}>
                                 <div style={{paddingRight: 20}}>{shelter.phone}</div>
                                 <a style={{color: "inherit"}} href={`tel:${shelter.phone}`}>
