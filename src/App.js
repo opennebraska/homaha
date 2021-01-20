@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react'
 import './App.css';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPhoneSquareAlt} from '@fortawesome/free-solid-svg-icons'
-import {faStar} from '@fortawesome/free-solid-svg-icons'
-import {Toolbar, AppBar, Typography, makeStyles} from "@material-ui/core";
+import {faStar, faBars} from '@fortawesome/free-solid-svg-icons'
+import {Toolbar, AppBar, Typography, makeStyles, IconButton} from "@material-ui/core";
 
 
 const staticShelters = [
@@ -88,7 +88,8 @@ const useStyles = makeStyles(() => ({
     appBar: {
         flexGrow: 1,
         display: "flex",
-        flexDirection: "row"
+        flexDirection: "row",
+        marginBottom: 50
     },
     appHeader: {
         backgroundColor: "#282c34",
@@ -126,11 +127,6 @@ function App() {
     const classes = useStyles();
 
     const [shelters, setShelters] = useState([])
-    const [allowIntox, setAllowIntox] = useState(true)
-    const [allowNarcotic, setAllowNarcotic] = useState(true)
-    const [male, setMale] = useState(true)
-    const [female, setFemale] = useState(true)
-    const [family, setFamily] = useState(true)
 
     useEffect(() => {
         console.log(staticShelters);
@@ -152,11 +148,16 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                <Toolbar className={classes.appBar}>
-                    <AppBar>
-                        <Typography component={'h5'} variant={'h5'}>Metro Shelter Project</Typography>
+                <div style={{marginBottom: 75}}>
+                    <AppBar className={classes.appBar}>
+                        <Toolbar>
+                            <IconButton>
+                                <FontAwesomeIcon icon={faBars} size={'xs'} color={'white'}/>
+                            </IconButton>
+                            <Typography component={'h5'} variant={'h5'}>Metro Shelter Project</Typography><Typography style={{backgroundColor: 'yellow', color: 'black'}}>Not ready for public release</Typography>
+                        </Toolbar>
                     </AppBar>
-                </Toolbar>
+                </div>
                 <Typography className={classes.warningText} color={'error'} gutterBottom>Individuals involved in Domestic Violence Situations may have
                 further resources available that are not listed below. Please contact your emergency services number for
                 assistance</Typography>
