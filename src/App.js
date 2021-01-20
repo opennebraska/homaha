@@ -4,85 +4,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPhoneSquareAlt} from '@fortawesome/free-solid-svg-icons'
 import {faStar, faBars} from '@fortawesome/free-solid-svg-icons'
 import {Toolbar, AppBar, Typography, makeStyles, IconButton} from "@material-ui/core";
-
-
-const staticShelters = [
-    {
-        id: 1,
-        name: 'Stephen Center',
-        rating: '4.3',
-        address: '2723 Q St, Omaha, NE 68107',
-        phone: '(402) 731-0238',
-        allowIntox: false,
-        allowNarcotic: true,
-        singleMale: true,
-        familyMale: true,
-        female: true,
-        children: true,
-        active: true,
-        currentCapacity: 23
-    },
-    {
-        id: 2,
-        name: 'Sienna Francis House',
-        rating: '3.5',
-        address: '1702 Nicholas St, Omaha, NE 68102',
-        phone: '(402) 341-1821',
-        allowIntox: true,
-        allowNarcotic: false,
-        singleMale: true,
-        familyMale: true,
-        female: true,
-        children: false,
-        active: true,
-        currentCapacity: 11
-    },
-    {
-        id: 3,
-        name: 'Open Door Mission / Lydia House / Garland Thompson Men\'s Center',
-        rating: '3.8',
-        address: '2809 N 20th St E, Omaha, NE 68110',
-        phone: '(402) 829-1531',
-        allowIntox: false,
-        allowNarcotic: true,
-        singleMale: true,
-        familyMale: true,
-        female: true,
-        children: true,
-        active: true,
-        currentCapacity: 0
-    },
-    {
-        id: 5,
-        name: "Micah House",
-        rating: '3.9',
-        address: "1415 Avenue J, Council Bluffs, IA 51501",
-        phone: "(712) 323-4416",
-        allowIntox: false,
-        allowNarcotic: true,
-        singleMale: false,
-        familyMale: true,
-        female: true,
-        children: true,
-        active: true,
-        currentCapacity: 5
-    },
-    {
-        id: 6,
-        name: "Joshua House",
-        rating: '4.0',
-        address: "1435 N. 15th St, Council Bluffs, IA 51501",
-        phone: '(712) 322-7570',
-        allowIntox: true,
-        allowNarcotic: false,
-        singleMale: true,
-        familyMale: false,
-        female: false,
-        children: false,
-        active: true,
-        currentCapacity: 3
-    }
-]
+import axios from 'axios';
 
 const useStyles = makeStyles(() => ({
     appBar: {
@@ -129,8 +51,11 @@ function App() {
     const [shelters, setShelters] = useState([])
 
     useEffect(() => {
-        console.log(staticShelters);
-        setShelters(staticShelters)
+        axios.get('https://codefornebraska-housing.herokuapp.com/shelters')
+            .then(res => {
+                console.log(res.data)
+                setShelters(res.data)
+            })
     }, [])
 
     const yesResponse = (
@@ -167,7 +92,7 @@ function App() {
                             className={classes.card}
                             key={shelter.id}
                         >
-                            <div style={{display: 'flex', alignItems: 'center'}}>{shelter.name}: {shelter.rating}<FontAwesomeIcon icon={faStar} size={"xs"}/></div>
+                            <div style={{display: 'flex', alignItems: 'center'}}>{shelter.name}</div>
                             <div style={{display: 'flex', alignItems: 'center'}}>
                                 <div style={{paddingRight: 20}}>{shelter.phone}</div>
                                 <a style={{color: "inherit"}} href={`tel:${shelter.phone}`}>
@@ -175,7 +100,7 @@ function App() {
                                 </a>
                             </div>
                             <div>{shelter.address}</div>
-                            <Typography color={shelter.currentCapacity < 1 ? 'error' : 'primary'} variant={'h5'} component={'h5'}>Available beds: {shelter.currentCapacity}</Typography>
+                            <Typography color={shelter.availableCapacity < 1 ? 'error' : 'primary'} variant={'h5'} component={'h5'}>Available beds: {shelter.availableCapacity}</Typography>
                             <br/>
                             <div className={classes.stats}>
                                 <div className={classes.statColumn}>
