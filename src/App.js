@@ -30,6 +30,7 @@ const GET_SHELTERS = gql`
             time
             location
             allowsFemale
+            availableCapacity
         }
     }
 `;
