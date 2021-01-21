@@ -3,6 +3,7 @@
   "homepage": "https://opennebraska.github.io/homaha/",
   "version": "0.1.0",
   "dependencies": {
+    "@apollo/client": "^3.3.7",
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@fortawesome/react-fontawesome": "^0.1.14",
@@ -11,6 +12,7 @@
     "@testing-library/react": "^11.2.3",
     "@testing-library/user-event": "^12.6.0",
     "axios": "^0.21.1",
+    "graphql": "^15.4.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",
