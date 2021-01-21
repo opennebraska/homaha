@@ -1,0 +1,25 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+}
+
+type Query {
+    shelter(limit: Float, search: String, status: String): [Shelter!]!
+}
+
+type Shelter {
+    allowsChildren: Boolean
+    allowsFamilyMale: Boolean
+    allowsFemale: Boolean
+    allowsIntoxication: Boolean
+    allowsNarcotics: Boolean
+    allowsSingleMale: Boolean
+    availableCapacity: Float
+    id: Float!
+    location: String
+    name: String
+    phone: String
+    time: String!
+    totalCapacity: Float
+}
