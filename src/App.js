@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Typography, makeStyles} from "@material-ui/core";
-import {ApolloClient, InMemoryCache, gql, useQuery} from "@apollo/client";
+import {gql, useQuery} from "@apollo/client";
 
 import Shelter from "./components/Shelter";
 import Header from "./components/Header";
@@ -39,7 +39,7 @@ function App() {
   const classes = useStyles();
 
   const {data} = useQuery(GET_SHELTERS);
-  const shelters = data && data.shelter || [];
+  const shelters = (data && data.shelter) || [];
   console.log(JSON.stringify(shelters))
   return (
     <div>
