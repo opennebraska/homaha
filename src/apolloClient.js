@@ -1,7 +1,10 @@
 import {ApolloClient, InMemoryCache} from "@apollo/client";
-
+let graphqlUrl = 'http://localhost:3001';
+if (process.env.NODE_ENV === 'production') {
+  graphqlUrl = 'https://codefornebraska-housing.herokuapp.com/graphql';
+}
 const client = new ApolloClient({
-  uri: 'https://codefornebraska-housing.herokuapp.com/graphql',
+  uri: graphqlUrl,
   cache: new InMemoryCache()
 })
 export default client
