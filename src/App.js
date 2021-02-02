@@ -1,23 +1,36 @@
-import React from 'react';
-import {Typography, makeStyles} from "@material-ui/core";
+import React, {useState, useRef, useEffect} from 'react';
+import {Typography, makeStyles, Popper, AppBar, Toolbar, IconButton, Grow, Paper, ClickAwayListener, MenuList, MenuItem, FormControlLabel, Checkbox} from "@material-ui/core";
 import {gql, useQuery} from "@apollo/client";
-
 import Shelter from "./components/Shelter";
-import Header from "./components/Header";
+import {Menu} from '@material-ui/icons';
 
 const useStyles = makeStyles(() => ({
   root: {
-    backgroundColor: '#303030'
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    alignItems: 'center'
   },
   appHeader: {
-    backgroundColor: "#282c34",
-    minHeight: "100vh",
+    marginBottom: 75
+  },
+  cardGroup: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center'
+  },
+  warningText: {
+    fontSize: "calc(10px + 1vmin)",
+    width: '80%',
+      textAlign: 'center',
+      margin: '0 auto',
+      marginBottom: '20px'
+  },
+  appBar: {
+    flexGrow: 1,
     display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: "calc(10px + 2vmin)",
-    color: "white",
+    flexDirection: "row",
+    marginBottom: 50
   },
 
 }))
@@ -28,38 +41,194 @@ const GET_SHELTERS = gql`
             id
             name
             time
+            phone
             location
-            allowsFemale
             availableCapacity
+            totalCapacity
+            allowsIntoxication
+            allowsNarcotics
+            allowsSingleMale
+            allowsFamilyMale
+            allowsFemale
+            allowsChildren
         }
     }
 `;
 
 function App() {
   const classes = useStyles();
-
   const {data} = useQuery(GET_SHELTERS);
+  const [open, setOpen] = useState(false);
+  const [check, setCheck] = useState({
+    allowIntoxCheck: true,
+    allowNarcoticCheck: true,
+  })
+  const anchorRef = useRef(null);
+
   const shelters = (data && data.shelter) || [];
-  console.log(JSON.stringify(shelters))
+
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleClose = (event) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  function handleListKeyDown(event) {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      setOpen(false);
+    }
+  }
+
+  const prevOpen = useRef(open);
+  useEffect(() => {
+    if (prevOpen.current === true && open === false) {
+      anchorRef.current.focus();
+    }
+
+    prevOpen.current = open;
+  }, [open]);
+
+  const handleChange = (event) => {
+    setCheck({ ...check, [event.target.name]: event.target.checked });
+  };
+
   return (
     <div>
-      <header className="App-header">
-
-        <Header/>
-
+      <header className={classes.appHeader}>
+        <AppBar className={classes.appBar}>
+          <Toolbar>
+            <IconButton>
+              <Menu
+                  ref={anchorRef}
+                  aria-controls={open ? 'menu-list-grow' : undefined}
+                  aria-haspopup="true"
+                  onClick={handleToggle}
+              />
+            </IconButton>
+            <Typography component={'h5'} variant={'h5'}>Metro Shelter Project</Typography><Typography style={{backgroundColor: 'yellow', color: 'black'}}>Not ready for public release</Typography>
+          </Toolbar>
+        </AppBar>
+      </header>
+      {/*{shelters.filter(shelter => shelter.allowsFemale).map(filteredShelter =>(*/}
+      {/*    <div>*/}
+      {/*      {filteredShelter.name}*/}
+      {/*    </div>*/}
+      {/*))}*/}
         <Typography className={classes.warningText} color={'error'} gutterBottom>Individuals involved in
           Domestic Violence Situations may have
           further resources available that are not listed below. Please contact your emergency services number
           for
           assistance</Typography>
+        <div className={classes.cardGroup}>
+          {shelters.map(shelter => {
+            return (<Shelter
+              shelter={shelter}
+              key={shelter.id}
+            />)
+          })}
+        </div>
 
-        {shelters.map(shelter => {
-          return (<Shelter
-            shelter={shelter}
-            key={shelter.id}
-          />)
-        })}
-      </header>
+        <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
+          {({ TransitionProps, placement }) => (
+              <Grow
+                  {...TransitionProps}
+                  style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+              >
+                <Paper style={{paddingTop: 20}}>
+                  <ClickAwayListener onClickAway={handleClose}>
+                    <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
+                      <MenuItem key={"menu1"}>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                                checked={check.allowIntoxCheck}
+                                onChange={handleChange}
+                                name="Menu1"
+                                color="primary"
+                            />
+                          }
+                          label="Allow Intox"
+                        />
+                      </MenuItem>
+                      <MenuItem key={"menu2"}>
+                        <FormControlLabel
+                            control={
+                              <Checkbox
+                                  checked={check.allowNarcoticCheck}
+                                  onChange={handleChange}
+                                  name="Menu2"
+                                  color="primary"
+                              />
+                            }
+                            label="Allow Intox"
+                        />
+                      </MenuItem>
+                      <hr/>
+                      <MenuItem key={"menu3"}>
+                        <FormControlLabel
+                            control={
+                              <Checkbox
+                                  checked={check.allowIntoxCheck}
+                                  onChange={handleChange}
+                                  name="Menu1"
+                                  color="primary"
+                              />
+                            }
+                            label="Allow Single Male"
+                        />
+                      </MenuItem>
+                      <MenuItem key={"menu4"}>
+                        <FormControlLabel
+                            control={
+                              <Checkbox
+                                  checked={check.allowIntoxCheck}
+                                  onChange={handleChange}
+                                  name="Menu1"
+                                  color="primary"
+                              />
+                            }
+                            label="Allow Family Male"
+                        />
+                      </MenuItem>
+                      <MenuItem key={"menu5"}>
+                        <FormControlLabel
+                            control={
+                              <Checkbox
+                                  checked={check.allowIntoxCheck}
+                                  onChange={handleChange}
+                                  name="Menu1"
+                                  color="primary"
+                              />
+                            }
+                            label="Allow Female"
+                        />
+                      </MenuItem>
+                      <MenuItem key={"menu6"}>
+                        <FormControlLabel
+                            control={
+                              <Checkbox
+                                  checked={check.allowIntoxCheck}
+                                  onChange={handleChange}
+                                  name="Menu1"
+                                  color="primary"
+                              />
+                            }
+                            label="Allow Children"
+                        />
+                      </MenuItem>
+                    </MenuList>
+                  </ClickAwayListener>
+                </Paper>
+              </Grow>
+          )}
+        </Popper>
     </div>
   );
 }

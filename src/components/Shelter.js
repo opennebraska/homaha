@@ -1,17 +1,18 @@
 import React from 'react';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPhoneSquareAlt} from "@fortawesome/free-solid-svg-icons";
 import {Typography, makeStyles} from "@material-ui/core";
+import {Card} from "@material-ui/core";
+import {Phone} from "@material-ui/icons";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   card: {
     display: 'flex',
     alignItems: 'center',
-    width: '90%',
-    justifyContent: 'space-between',
+    maxWidth: 900,
+    width: '100%',
     flexDirection: 'column',
-    textAlign: 'left',
-    color: 'white'
+    margin: '0 auto',
+    marginBottom: 20,
+    padding: 20
   },
   stats: {
     display: 'flex',
@@ -19,6 +20,11 @@ const useStyles = makeStyles(() => ({
   },
   statColumn: {
     marginRight: 20,
+  },
+  phone: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center'
   }
 }))
 
@@ -39,16 +45,12 @@ export default function Shelter(props) {
   )
 
   return (
-    <div className={classes.card}>
-      <div style={{display: 'flex'}}>
-        <div style={{display: 'flex', alignItems: 'center'}}>
-          <Typography variant={'h5'}>{shelter.name}</Typography>
-        </div>
-        <div style={{display: 'flex', alignItems: 'center'}}>
-          <div style={{paddingRight: 20}}>{shelter.phone}</div>
-          <a style={{color: "inherit"}} href={`tel:${shelter.phone}`}>
-            <FontAwesomeIcon icon={faPhoneSquareAlt} size={"2x"}/>
-          </a>
+    <Card className={classes.card} gutterbottom>
+      <div>
+        <Typography variant={'h5'}>{shelter.name}</Typography>
+        <div className={classes.phone}>
+          <Typography style={{paddingRight: 20}}>{shelter.phone}</Typography>
+          <a href={'tel:' + shelter.phone} style={{color: 'white'}}><Phone/></a>
         </div>
       </div>
       <div>{shelter.address}</div>
@@ -59,29 +61,26 @@ export default function Shelter(props) {
         <div className={classes.statColumn}>
           <div>
             Allow Intox: {shelter.allowIntox ? yesResponse : noResponse}
-          </div>
+           </div>
           <div>
             Allow Narcotic: {shelter.allowNarcotic ? yesResponse : noResponse}
           </div>
         </div>
         <div className={classes.statColumn}>
           <div>
-            Allow Single Male: {shelter.singleMale ? yesResponse : noResponse}
+            Allow Single Male: {shelter.allowsSingleMale ? yesResponse : noResponse}
           </div>
           <div>
-            Allow Family Male: {shelter.familyMale ? yesResponse : noResponse}
+            Allow Family Male: {shelter.allowFamilyMale ? yesResponse : noResponse}
           </div>
           <div>
-            Allow Female: {shelter.female ? yesResponse : noResponse}
+            Allow Female: {shelter.allowsFemale ? yesResponse : noResponse}
           </div>
           <div>
-            Allow Children: {shelter.children ? yesResponse : noResponse}
+            Allow Children: {shelter.allowsChildren ? yesResponse : noResponse}
           </div>
         </div>
       </div>
-      <div style={{paddingTop: 10, paddingBottom: 10, width: '50%'}}>
-        <hr/>
-      </div>
-    </div>
+    </Card>
   )
 }

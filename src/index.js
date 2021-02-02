@@ -5,11 +5,21 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import client from './apolloClient';
 import {ApolloProvider} from '@apollo/client'
+import {MuiThemeProvider, createMuiTheme, CssBaseline} from "@material-ui/core";
+
+const theme = createMuiTheme({
+    palette: {
+        type: "dark"
+    }
+})
 
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <App/>
+        <MuiThemeProvider theme={theme}>
+            <CssBaseline/>
+            <App/>
+        </MuiThemeProvider>
     </ApolloProvider>
   </React.StrictMode>
   ,
