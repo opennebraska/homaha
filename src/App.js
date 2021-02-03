@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef, useEffect, useMemo} from 'react';
 import {Typography, makeStyles, Popper, AppBar, Toolbar, IconButton, Grow, Paper, ClickAwayListener, MenuList, MenuItem, FormControlLabel, Checkbox} from "@material-ui/core";
 import {gql, useQuery} from "@apollo/client";
 import Shelter from "./components/Shelter";
@@ -60,32 +60,23 @@ function App() {
   const {data} = useQuery(GET_SHELTERS);
   const [open, setOpen] = useState(false);
   const [check, setCheck] = useState({
-    allowsIntoxCheck: false,
-    allowsNarcoticCheck: false,
+    isIntoxicated: false,
+    isNarcotics: false,
     allowsSingleMale: true,
     allowsFamilyMale: true,
     allowsFemale: true,
     allowsChildren: true
   })
   const anchorRef = useRef(null);
-
-  const [shelters, setShelters] = useState([]);
-
-  useEffect( () => {
-    setShelters((data && data.shelter) || [])
-  },[data])
-
-  useEffect( () => {
-    let localShelters = [...shelters];
-
-    //if (!intoxCheckbox) => filter allowsintox = false
-
-    localShelters = localShelters.filter(shelter => localShelters.allowsFemale).map(filteredShelter =>(
-        <div>
-          {filteredShelter.name}
-        </div>
-    ))
-  }, [check])
+  const shelters = data && data.shelter || []
+  const filteredShelters = shelters.filter(shelter => {
+    return (shelter.allowsIntoxication || shelter.allowsIntoxication === check.isIntoxicated) &&
+        (shelter.allowsNarcotics || shelter.allowsNarcotics === check.isNarcotics) &&
+        (shelter.allowsSingleMale || shelter.allowsSingleMale === check.allowsSingleMale) &&
+        (shelter.allowsFamilyMale || shelter.allowsFamilyMale === check.allowsFamilyMale) &&
+        (shelter.allowsFemale || shelter.allowsFemale === check.allowsFemale) &&
+        (shelter.allowsChildren || shelter.allowsChildren === check.allowsChildren)
+  })
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -143,7 +134,7 @@ function App() {
           for
           assistance</Typography>
         <div className={classes.cardGroup}>
-          {shelters.map(shelter => {
+          {filteredShelters.map(shelter => {
             return (<Shelter
               shelter={shelter}
               key={shelter.id}
@@ -164,8 +155,8 @@ function App() {
                         <FormControlLabel
                           control={
                             <Checkbox
-                                checked={check.allowsIntoxCheck}
-                                onChange={handleChange('allowsIntoxCheck')}
+                                checked={check.isIntoxicated}
+                                onChange={handleChange('isIntoxicated')}
                                 name="Menu1"
                                 color="primary"
                             />
@@ -177,13 +168,13 @@ function App() {
                         <FormControlLabel
                             control={
                               <Checkbox
-                                  checked={check.allowsNarcoticCheck}
-                                  onChange={handleChange('allowsNarcoticCheck')}
+                                  checked={check.isNarcotics}
+                                  onChange={handleChange('isNarcotics')}
                                   name="Menu2"
                                   color="primary"
                               />
                             }
-                            label="Narcotic"
+                            label="Narcotics"
                         />
                       </MenuItem>
                       <hr/>
