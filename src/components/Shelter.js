@@ -53,31 +53,31 @@ export default function Shelter(props) {
           <a href={'tel:' + shelter.phone} style={{color: 'white'}}><Phone/></a>
         </div>
       </div>
-      <div>{shelter.address}</div>
+      <div>{shelter.location}</div>
       <Typography color={shelter.availableCapacity < 1 ? 'error' : 'primary'} variant={'h5'} component={'h5'}>Available
         beds: {shelter.availableCapacity}</Typography>
       <br/>
       <div className={classes.stats}>
         <div className={classes.statColumn}>
           <div>
-            Allow Intox: {shelter.allowIntox ? yesResponse : noResponse}
+            Intox: {shelter.allowIntox ? yesResponse : noResponse}
            </div>
           <div>
-            Allow Narcotic: {shelter.allowNarcotic ? yesResponse : noResponse}
+            Narcotic: {shelter.allowNarcotic ? yesResponse : noResponse}
           </div>
         </div>
         <div className={classes.statColumn}>
           <div>
-            Allow Single Male: {shelter.allowsSingleMale ? yesResponse : noResponse}
+            Single Male: {shelter.allowsSingleMale ? yesResponse : noResponse}
           </div>
           <div>
-            Allow Family Male: {shelter.allowFamilyMale ? yesResponse : noResponse}
+            Family Male: {shelter.allowFamilyMale ? yesResponse : noResponse}
           </div>
           <div>
-            Allow Female: {shelter.allowsFemale ? yesResponse : noResponse}
+            Female: {shelter.allowsFemale ? yesResponse : noResponse}
           </div>
           <div>
-            Allow Children: {shelter.allowsChildren ? yesResponse : noResponse}
+            Children: {shelter.allowsChildren ? yesResponse : noResponse}
           </div>
         </div>
       </div>

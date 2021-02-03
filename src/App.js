@@ -60,12 +60,32 @@ function App() {
   const {data} = useQuery(GET_SHELTERS);
   const [open, setOpen] = useState(false);
   const [check, setCheck] = useState({
-    allowIntoxCheck: true,
-    allowNarcoticCheck: true,
+    allowsIntoxCheck: false,
+    allowsNarcoticCheck: false,
+    allowsSingleMale: true,
+    allowsFamilyMale: true,
+    allowsFemale: true,
+    allowsChildren: true
   })
   const anchorRef = useRef(null);
 
-  const shelters = (data && data.shelter) || [];
+  const [shelters, setShelters] = useState([]);
+
+  useEffect( () => {
+    setShelters((data && data.shelter) || [])
+  },[data])
+
+  useEffect( () => {
+    let localShelters = [...shelters];
+
+    //if (!intoxCheckbox) => filter allowsintox = false
+
+    localShelters = localShelters.filter(shelter => localShelters.allowsFemale).map(filteredShelter =>(
+        <div>
+          {filteredShelter.name}
+        </div>
+    ))
+  }, [check])
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -95,8 +115,8 @@ function App() {
     prevOpen.current = open;
   }, [open]);
 
-  const handleChange = (event) => {
-    setCheck({ ...check, [event.target.name]: event.target.checked });
+  const handleChange = (name) => (event) => {
+    setCheck({ ...check, [name]: event.target.checked });
   };
 
   return (
@@ -116,12 +136,8 @@ function App() {
           </Toolbar>
         </AppBar>
       </header>
-      {/*{shelters.filter(shelter => shelter.allowsFemale).map(filteredShelter =>(*/}
-      {/*    <div>*/}
-      {/*      {filteredShelter.name}*/}
-      {/*    </div>*/}
-      {/*))}*/}
-        <Typography className={classes.warningText} color={'error'} gutterBottom>Individuals involved in
+
+        <Typography className={classes.warningText} color={'error'}>Individuals involved in
           Domestic Violence Situations may have
           further resources available that are not listed below. Please contact your emergency services number
           for
@@ -148,26 +164,26 @@ function App() {
                         <FormControlLabel
                           control={
                             <Checkbox
-                                checked={check.allowIntoxCheck}
-                                onChange={handleChange}
+                                checked={check.allowsIntoxCheck}
+                                onChange={handleChange('allowsIntoxCheck')}
                                 name="Menu1"
                                 color="primary"
                             />
                           }
-                          label="Allow Intox"
+                          label="Intoxicated"
                         />
                       </MenuItem>
                       <MenuItem key={"menu2"}>
                         <FormControlLabel
                             control={
                               <Checkbox
-                                  checked={check.allowNarcoticCheck}
-                                  onChange={handleChange}
+                                  checked={check.allowsNarcoticCheck}
+                                  onChange={handleChange('allowsNarcoticCheck')}
                                   name="Menu2"
                                   color="primary"
                               />
                             }
-                            label="Allow Intox"
+                            label="Narcotic"
                         />
                       </MenuItem>
                       <hr/>
@@ -175,9 +191,9 @@ function App() {
                         <FormControlLabel
                             control={
                               <Checkbox
-                                  checked={check.allowIntoxCheck}
-                                  onChange={handleChange}
-                                  name="Menu1"
+                                  checked={check.allowsSingleMale}
+                                  onChange={handleChange('allowsSingleMale')}
+                                  name="Menu3"
                                   color="primary"
                               />
                             }
@@ -188,9 +204,9 @@ function App() {
                         <FormControlLabel
                             control={
                               <Checkbox
-                                  checked={check.allowIntoxCheck}
-                                  onChange={handleChange}
-                                  name="Menu1"
+                                  checked={check.allowsFamilyMale}
+                                  onChange={handleChange('allowsFamilyMale')}
+                                  name="Menu4"
                                   color="primary"
                               />
                             }
@@ -201,9 +217,9 @@ function App() {
                         <FormControlLabel
                             control={
                               <Checkbox
-                                  checked={check.allowIntoxCheck}
-                                  onChange={handleChange}
-                                  name="Menu1"
+                                  checked={check.allowsFemale}
+                                  onChange={handleChange('allowsFemale')}
+                                  name="Menu5"
                                   color="primary"
                               />
                             }
@@ -214,9 +230,9 @@ function App() {
                         <FormControlLabel
                             control={
                               <Checkbox
-                                  checked={check.allowIntoxCheck}
-                                  onChange={handleChange}
-                                  name="Menu1"
+                                  checked={check.allowsChildren}
+                                  onChange={handleChange('allowsChildren')}
+                                  name="Menu6"
                                   color="primary"
                               />
                             }
