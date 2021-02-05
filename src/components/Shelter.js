@@ -39,7 +39,7 @@ export default function Shelter(props) {
   )
 
   const noResponse = (
-    <span style={{color: 'red'}}>
+    <span style={{color: '#f50057'}}>
             No
         </span>
   )

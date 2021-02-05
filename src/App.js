@@ -150,7 +150,7 @@ function App() {
         </AppBar>
       </header>
 
-      <Typography className={classes.warningText} color={'error'}>Individuals involved in
+      <Typography className={classes.warningText} color={'secondary'}>Individuals involved in
         Domestic Violence Situations may have
         further resources available that are not listed below. Please contact your emergency services number
         for
