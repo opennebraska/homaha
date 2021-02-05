@@ -4,7 +4,7 @@
   "extensions": {
     "endpoints": {
       "Remote SWAPI GraphQL Endpoint": {
-        "url": "https://codefornebraska-housing.herokuapp.com/graphql",
+        "url": "http://localhost:3001/graphql",
         "headers": {
           "user-agent": "JS GraphQL"
         },

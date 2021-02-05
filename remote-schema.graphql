@@ -8,18 +8,26 @@ type Query {
     shelter(limit: Float, search: String, status: String): [Shelter!]!
 }
 
+type Resident {
+    name: String!
+    sex: String!
+}
+
 type Shelter {
     allowsChildren: Boolean
+    allowsFamilyFemale: Boolean
     allowsFamilyMale: Boolean
-    allowsFemale: Boolean
     allowsIntoxication: Boolean
     allowsNarcotics: Boolean
+    allowsSingleFemale: Boolean
     allowsSingleMale: Boolean
     availableCapacity: Float
+    createdAt: String!
     id: Float!
     location: String
     name: String
     phone: String
-    time: String!
+    residents(namePartial: String): [Resident!]!
+    "Total amount of residents the shelter can accept"
     totalCapacity: Float
 }

@@ -60,10 +60,10 @@ export default function Shelter(props) {
       <div className={classes.stats}>
         <div className={classes.statColumn}>
           <div>
-            Intox: {shelter.allowIntox ? yesResponse : noResponse}
+            Intoxication: {shelter.allowsIntoxication ? yesResponse : noResponse}
            </div>
           <div>
-            Narcotic: {shelter.allowNarcotic ? yesResponse : noResponse}
+            Narcotics: {shelter.allowsNarcotics ? yesResponse : noResponse}
           </div>
         </div>
         <div className={classes.statColumn}>
@@ -71,10 +71,13 @@ export default function Shelter(props) {
             Single Male: {shelter.allowsSingleMale ? yesResponse : noResponse}
           </div>
           <div>
-            Family Male: {shelter.allowFamilyMale ? yesResponse : noResponse}
+            Family Male: {shelter.allowsFamilyMale ? yesResponse : noResponse}
           </div>
           <div>
-            Female: {shelter.allowsFemale ? yesResponse : noResponse}
+            Female: {shelter.allowsSingleFemale ? yesResponse : noResponse}
+          </div>
+          <div>
+            Family Female: {shelter.allowsFamilyFemale ? yesResponse : noResponse}
           </div>
           <div>
             Children: {shelter.allowsChildren ? yesResponse : noResponse}

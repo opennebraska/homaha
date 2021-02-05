@@ -1,5 +1,20 @@
-import React, {useState, useRef, useEffect, useMemo} from 'react';
-import {Typography, makeStyles, Popper, AppBar, Toolbar, IconButton, Grow, Paper, ClickAwayListener, MenuList, MenuItem, FormControlLabel, Checkbox} from "@material-ui/core";
+import React, {useState, useRef, useEffect} from 'react';
+import {any, values} from 'ramda';
+import {
+  Typography,
+  makeStyles,
+  Popper,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Grow,
+  Paper,
+  ClickAwayListener,
+  MenuList,
+  MenuItem,
+  FormControlLabel,
+  Checkbox
+} from "@material-ui/core";
 import {gql, useQuery} from "@apollo/client";
 import Shelter from "./components/Shelter";
 import {Menu} from '@material-ui/icons';
@@ -22,9 +37,9 @@ const useStyles = makeStyles(() => ({
   warningText: {
     fontSize: "calc(10px + 1vmin)",
     width: '80%',
-      textAlign: 'center',
-      margin: '0 auto',
-      marginBottom: '20px'
+    textAlign: 'center',
+    margin: '0 auto',
+    marginBottom: '20px'
   },
   appBar: {
     flexGrow: 1,
@@ -40,7 +55,7 @@ const GET_SHELTERS = gql`
         shelter {
             id
             name
-            time
+            createdAt
             phone
             location
             availableCapacity
@@ -49,7 +64,8 @@ const GET_SHELTERS = gql`
             allowsNarcotics
             allowsSingleMale
             allowsFamilyMale
-            allowsFemale
+            allowsFamilyFemale
+            allowsSingleFemale
             allowsChildren
         }
     }
@@ -62,20 +78,26 @@ function App() {
   const [check, setCheck] = useState({
     isIntoxicated: false,
     isNarcotics: false,
-    allowsSingleMale: true,
-    allowsFamilyMale: true,
-    allowsFemale: true,
-    allowsChildren: true
+    isSingleMale: false,
+    isSingleFemale: false,
+    isFamilyMale: false,
+    isFamilyFemale: false,
+    isChildren: false
   })
   const anchorRef = useRef(null);
   const shelters = data && data.shelter || []
+    console.log(JSON.stringify(check))
   const filteredShelters = shelters.filter(shelter => {
+    if (!any(value => value == true)(values(check))) {
+      return true;
+    }
     return (shelter.allowsIntoxication || shelter.allowsIntoxication === check.isIntoxicated) &&
-        (shelter.allowsNarcotics || shelter.allowsNarcotics === check.isNarcotics) &&
-        (shelter.allowsSingleMale || shelter.allowsSingleMale === check.allowsSingleMale) &&
-        (shelter.allowsFamilyMale || shelter.allowsFamilyMale === check.allowsFamilyMale) &&
-        (shelter.allowsFemale || shelter.allowsFemale === check.allowsFemale) &&
-        (shelter.allowsChildren || shelter.allowsChildren === check.allowsChildren)
+      (shelter.allowsNarcotics || shelter.allowsNarcotics === check.isNarcotics) &&
+      (shelter.allowsSingleMale || shelter.allowsSingleMale === check.isSingleMale) &&
+      (shelter.allowsSingleFemale || shelter.allowsSingleFemale === check.isSingleFemale) &&
+      (shelter.allowsFamilyMale || shelter.allowsFamilyMale === check.isFamilyMale) &&
+      (shelter.allowsFamilyFemale || shelter.allowsFamilyFemale === check.isFamilyFemale) &&
+      (shelter.allowsChildren || shelter.allowsChildren === check.isChildren)
   })
 
   const handleToggle = () => {
@@ -107,7 +129,7 @@ function App() {
   }, [open]);
 
   const handleChange = (name) => (event) => {
-    setCheck({ ...check, [name]: event.target.checked });
+    setCheck({...check, [name]: event.target.checked});
   };
 
   return (
@@ -117,125 +139,137 @@ function App() {
           <Toolbar>
             <IconButton>
               <Menu
-                  ref={anchorRef}
-                  aria-controls={open ? 'menu-list-grow' : undefined}
-                  aria-haspopup="true"
-                  onClick={handleToggle}
+                ref={anchorRef}
+                aria-controls={open ? 'menu-list-grow' : undefined}
+                aria-haspopup="true"
+                onClick={handleToggle}
               />
             </IconButton>
-            <Typography component={'h5'} variant={'h5'}>Metro Shelter Project</Typography><Typography style={{backgroundColor: 'yellow', color: 'black'}}>Not ready for public release</Typography>
+            <Typography component={'h5'} variant={'h5'}>Metro Shelter Project</Typography><Typography
+            style={{backgroundColor: 'yellow', color: 'black'}}>Not ready for public release</Typography>
           </Toolbar>
         </AppBar>
       </header>
 
-        <Typography className={classes.warningText} color={'error'}>Individuals involved in
-          Domestic Violence Situations may have
-          further resources available that are not listed below. Please contact your emergency services number
-          for
-          assistance</Typography>
-        <div className={classes.cardGroup}>
-          {filteredShelters.map(shelter => {
-            return (<Shelter
-              shelter={shelter}
-              key={shelter.id}
-            />)
-          })}
-        </div>
+      <Typography className={classes.warningText} color={'error'}>Individuals involved in
+        Domestic Violence Situations may have
+        further resources available that are not listed below. Please contact your emergency services number
+        for
+        assistance</Typography>
+      <div className={classes.cardGroup}>
+        {filteredShelters.map(shelter => {
+          return (<Shelter
+            shelter={shelter}
+            key={shelter.id}
+          />)
+        })}
+      </div>
 
-        <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
-          {({ TransitionProps, placement }) => (
-              <Grow
-                  {...TransitionProps}
-                  style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
-              >
-                <Paper style={{paddingTop: 20}}>
-                  <ClickAwayListener onClickAway={handleClose}>
-                    <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
-                      <MenuItem key={"menu1"}>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                                checked={check.isIntoxicated}
-                                onChange={handleChange('isIntoxicated')}
-                                name="Menu1"
-                                color="primary"
-                            />
-                          }
-                          label="Intoxicated"
+      <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
+        {({TransitionProps, placement}) => (
+          <Grow
+            {...TransitionProps}
+            style={{transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom'}}
+          >
+            <Paper style={{paddingTop: 20}}>
+              <ClickAwayListener onClickAway={handleClose}>
+                <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
+                  <MenuItem key={"menu1"}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={check.isIntoxicated}
+                          onChange={handleChange('isIntoxicated')}
+                          name="Menu1"
+                          color="primary"
                         />
-                      </MenuItem>
-                      <MenuItem key={"menu2"}>
-                        <FormControlLabel
-                            control={
-                              <Checkbox
-                                  checked={check.isNarcotics}
-                                  onChange={handleChange('isNarcotics')}
-                                  name="Menu2"
-                                  color="primary"
-                              />
-                            }
-                            label="Narcotics"
+                      }
+                      label="Intoxicated"
+                    />
+                  </MenuItem>
+                  <MenuItem key={"menu2"}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={check.isNarcotics}
+                          onChange={handleChange('isNarcotics')}
+                          name="Menu2"
+                          color="primary"
                         />
-                      </MenuItem>
-                      <hr/>
-                      <MenuItem key={"menu3"}>
-                        <FormControlLabel
-                            control={
-                              <Checkbox
-                                  checked={check.allowsSingleMale}
-                                  onChange={handleChange('allowsSingleMale')}
-                                  name="Menu3"
-                                  color="primary"
-                              />
-                            }
-                            label="Allow Single Male"
+                      }
+                      label="Narcotics"
+                    />
+                  </MenuItem>
+                  <hr/>
+                  <MenuItem key={"menu3"}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={check.isSingleMale}
+                          onChange={handleChange('isSingleMale')}
+                          name="Menu3"
+                          color="primary"
                         />
-                      </MenuItem>
-                      <MenuItem key={"menu4"}>
-                        <FormControlLabel
-                            control={
-                              <Checkbox
-                                  checked={check.allowsFamilyMale}
-                                  onChange={handleChange('allowsFamilyMale')}
-                                  name="Menu4"
-                                  color="primary"
-                              />
-                            }
-                            label="Allow Family Male"
+                      }
+                      label="Single Male"
+                    />
+                  </MenuItem>
+                  <MenuItem key={"menu4"}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={check.isFamilyMale}
+                          onChange={handleChange('isFamilyMale')}
+                          name="Menu4"
+                          color="primary"
                         />
-                      </MenuItem>
-                      <MenuItem key={"menu5"}>
-                        <FormControlLabel
-                            control={
-                              <Checkbox
-                                  checked={check.allowsFemale}
-                                  onChange={handleChange('allowsFemale')}
-                                  name="Menu5"
-                                  color="primary"
-                              />
-                            }
-                            label="Allow Female"
+                      }
+                      label="Family Male"
+                    />
+                  </MenuItem>
+                  <MenuItem key={"menu5"}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={check.isSingleFemale}
+                          onChange={handleChange('isSingleFemale')}
+                          color="primary"
                         />
-                      </MenuItem>
-                      <MenuItem key={"menu6"}>
-                        <FormControlLabel
-                            control={
-                              <Checkbox
-                                  checked={check.allowsChildren}
-                                  onChange={handleChange('allowsChildren')}
-                                  name="Menu6"
-                                  color="primary"
-                              />
-                            }
-                            label="Allow Children"
+                      }
+                      label="Single Female"
+                    />
+                  </MenuItem>
+                  <MenuItem key={"menu5"}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={check.isFamilyFemale}
+                          onChange={handleChange('isFamilyFemale')}
+                          color="primary"
                         />
-                      </MenuItem>
-                    </MenuList>
-                  </ClickAwayListener>
-                </Paper>
-              </Grow>
-          )}
-        </Popper>
+                      }
+                      label="Family Female"
+                    />
+                  </MenuItem>
+                  <MenuItem key={"menu6"}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={check.isChildren}
+                          onChange={handleChange('isChildren')}
+                          name="Menu6"
+                          color="primary"
+                        />
+                      }
+                      label="Allow Children"
+                    />
+                  </MenuItem>
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
     </div>
   );
 }
