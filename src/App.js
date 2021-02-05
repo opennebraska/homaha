@@ -137,12 +137,11 @@ function App() {
       <header className={classes.appHeader}>
         <AppBar className={classes.appBar}>
           <Toolbar>
-            <IconButton>
+            <IconButton onClick={handleToggle}>
               <Menu
                 ref={anchorRef}
                 aria-controls={open ? 'menu-list-grow' : undefined}
                 aria-haspopup="true"
-                onClick={handleToggle}
               />
             </IconButton>
             <Typography component={'h5'} variant={'h5'}>Metro Shelter Project</Typography><Typography
