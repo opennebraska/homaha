@@ -2,6 +2,7 @@ import React from 'react';
 import {Typography, makeStyles} from "@material-ui/core";
 import {Card} from "@material-ui/core";
 import {Phone} from "@material-ui/icons";
+import Colors from '../Colors'
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -39,13 +40,13 @@ export default function Shelter(props) {
   )
 
   const noResponse = (
-    <span style={{color: '#f50057'}}>
+    <span style={{color: Colors.red}}>
             No
         </span>
   )
 
   return (
-    <Card className={classes.card} gutterbottom>
+    <Card className={classes.card}>
       <div>
         <Typography variant={'h5'}>{shelter.name}</Typography>
         <div className={classes.phone}>
