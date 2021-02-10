@@ -34,13 +34,6 @@ const useStyles = makeStyles(() => ({
     flexDirection: 'column',
     justifyContent: 'center'
   },
-  warningText: {
-    fontSize: "calc(10px + 1vmin)",
-    width: '80%',
-    textAlign: 'center',
-    margin: '0 auto',
-    marginBottom: '20px'
-  },
   appBar: {
     flexGrow: 1,
     display: "flex",
@@ -84,7 +77,7 @@ function App() {
     isChildren: false
   })
   const anchorRef = useRef(null);
-  const shelters = data && (data.shelter || [])
+  const shelters = (data && data.shelter) || []
   console.log(JSON.stringify(check))
   const filteredShelters = shelters.filter(shelter => {
     if (!any(value => value === true)(values(check))) {
@@ -141,7 +134,7 @@ function App() {
     return (
       <ClickAwayListener onClickAway={handleClickAway}>
         <div>
-          <Typography variant={'h6'}className={classes.warningText} color={'secondary'} onClick={handleClick}>
+          <Typography variant={'h5'} color={'secondary'} onClick={handleClick}>
             Domestic Violence<Info/>
           </Typography>
           <Popper open={!!anchorEl} anchorEl={anchorEl} style={{padding: '0px 20px'}}>
@@ -169,7 +162,7 @@ function App() {
             />
           </IconButton>
           <Toolbar>
-            <Typography component={'h5'} variant={'h5'}>Metro Shelter Project</Typography>
+            <Typography variant={'h5'}>Metro Shelter Project</Typography>
           </Toolbar>
         </AppBar>
       </header>
