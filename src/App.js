@@ -17,7 +17,7 @@ import {
 } from "@material-ui/core";
 import {gql, useQuery} from "@apollo/client";
 import Shelter from "./components/Shelter";
-import {Menu} from '@material-ui/icons';
+import {Info, Menu} from '@material-ui/icons';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -45,7 +45,6 @@ const useStyles = makeStyles(() => ({
     flexGrow: 1,
     display: "flex",
     flexDirection: "row",
-    marginBottom: 50
   },
 
 }))
@@ -85,10 +84,10 @@ function App() {
     isChildren: false
   })
   const anchorRef = useRef(null);
-  const shelters = data && data.shelter || []
-    console.log(JSON.stringify(check))
+  const shelters = data && (data.shelter || [])
+  console.log(JSON.stringify(check))
   const filteredShelters = shelters.filter(shelter => {
-    if (!any(value => value == true)(values(check))) {
+    if (!any(value => value === true)(values(check))) {
       return true;
     }
     return (shelter.allowsIntoxication || shelter.allowsIntoxication === check.isIntoxicated) &&
@@ -131,30 +130,51 @@ function App() {
   const handleChange = (name) => (event) => {
     setCheck({...check, [name]: event.target.checked});
   };
+  const DomesticViolenceMessage = (props) => {
+    const [anchorEl, setAnchorEl] = useState(null);
+    const handleClick = (event) => {
+      setAnchorEl(anchorEl ? null : event.currentTarget)
+    }
+    const handleClickAway = () => {
+      setAnchorEl(null)
+    }
+    return (
+      <ClickAwayListener onClickAway={handleClickAway}>
+        <div>
+          <Typography variant={'h6'}className={classes.warningText} color={'secondary'} onClick={handleClick}>
+            Domestic Violence<Info/>
+          </Typography>
+          <Popper open={!!anchorEl} anchorEl={anchorEl} style={{padding: '0px 20px'}}>
+            <Paper>
+              <div style={{padding: '10px 10px'}}>Individuals involved in Domestic Violence Situations may have further
+                resources available that are not
+                listed below. Please contact your emergency services number for assistance
+              </div>
+            </Paper>
+          </Popper>
+        </div>
+      </ClickAwayListener>
+    )
+  }
 
   return (
     <div>
       <header className={classes.appHeader}>
-        <AppBar className={classes.appBar}>
+        <AppBar className={classes.appBar} color="default">
+          <IconButton onClick={handleToggle}>
+            <Menu
+              ref={anchorRef}
+              aria-controls={open ? 'menu-list-grow' : undefined}
+              aria-haspopup="true"
+            />
+          </IconButton>
           <Toolbar>
-            <IconButton onClick={handleToggle}>
-              <Menu
-                ref={anchorRef}
-                aria-controls={open ? 'menu-list-grow' : undefined}
-                aria-haspopup="true"
-              />
-            </IconButton>
-            <Typography component={'h5'} variant={'h5'}>Metro Shelter Project</Typography><Typography
-            style={{backgroundColor: 'yellow', color: 'black'}}>Not ready for public release</Typography>
+            <Typography component={'h5'} variant={'h5'}>Metro Shelter Project</Typography>
           </Toolbar>
         </AppBar>
       </header>
 
-      <Typography className={classes.warningText} color={'secondary'}>Individuals involved in
-        Domestic Violence Situations may have
-        further resources available that are not listed below. Please contact your emergency services number
-        for
-        assistance</Typography>
+      <DomesticViolenceMessage/>
       <div className={classes.cardGroup}>
         {filteredShelters.map(shelter => {
           return (<Shelter
