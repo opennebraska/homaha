@@ -158,6 +158,12 @@ function App() {
     )
   }
 
+  const DraftOnly = () => {
+    return (
+      <div style={{textAlign: 'center'}}>DRAFT ONLY - Not Ready for Public Use</div>
+    )
+  }
+
   return (
     <div>
       <header className={classes.appHeader}>
@@ -174,7 +180,7 @@ function App() {
           </Toolbar>
         </AppBar>
       </header>
-
+      <DraftOnly/>
       <DomesticViolenceMessage/>
       <div className={classes.cardGroup}>
         {filteredShelters && filteredShelters.map(shelter => {
