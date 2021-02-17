@@ -27,12 +27,19 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center'
   },
   appHeader: {
-    marginBottom: 75
+    marginBottom: 65
   },
   cardGroup: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center'
+  },
+  warningText: {
+    fontSize: "calc(10px + 1vmin)",
+    width: '80%',
+    textAlign: 'center',
+    margin: '0 auto',
+    marginBottom: 10
   },
   appBar: {
     flexGrow: 1,
@@ -79,7 +86,7 @@ function App() {
   const anchorRef = useRef(null);
   const shelters = (data && data.shelter) || []
   console.log(JSON.stringify(check))
-  const filteredShelters = shelters.filter(shelter => {
+  const filteredShelters = shelters?.filter(shelter => {
     if (!any(value => value === true)(values(check))) {
       return true;
     }
@@ -133,10 +140,11 @@ function App() {
     }
     return (
       <ClickAwayListener onClickAway={handleClickAway}>
-        <div>
-          <Typography variant={'h5'} color={'secondary'} onClick={handleClick}>
-            Domestic Violence<Info/>
+        <div className={classes.warningText}>
+          <Typography variant={'h6'}  color={'secondary'} onClick={handleClick}>
+            Domestic Violence <Info />
           </Typography>
+
           <Popper open={!!anchorEl} anchorEl={anchorEl} style={{padding: '0px 20px'}}>
             <Paper>
               <div style={{padding: '10px 10px'}}>Individuals involved in Domestic Violence Situations may have further
@@ -169,7 +177,7 @@ function App() {
 
       <DomesticViolenceMessage/>
       <div className={classes.cardGroup}>
-        {filteredShelters.map(shelter => {
+        {filteredShelters && filteredShelters.map(shelter => {
           return (<Shelter
             shelter={shelter}
             key={shelter.id}
