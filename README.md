@@ -1,5 +1,5 @@
 Application Available Here:
-https://opennebraska.github.io/homaha/
+https://codefornebraska.github.io/homaha/
 
 # Getting Started with Create React App
 
