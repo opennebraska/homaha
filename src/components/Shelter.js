@@ -8,10 +8,11 @@ const useStyles = makeStyles((theme) => ({
   card: {
     display: 'flex',
     alignItems: 'left',
-    maxWidth: 900,
+    maxWidth: 600,
     width: '100%',
+    minWidth: 300,
     flexDirection: 'column',
-    margin: '0 auto',
+    margin: '20px auto',
     marginBottom: 20,
     padding: 20
   },
@@ -33,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Shelter(props) {
   const shelter = props.shelter
+  const distance = props.distance
   const classes = useStyles();
 
   const {
@@ -91,7 +93,7 @@ export default function Shelter(props) {
         <div style={{flex: 3}}>
           <Typography variant={'h5'}>{name}</Typography>
           <a href={`http://maps.google.com/?q=${location}`} style={{color: 'lightblue'}}>{location}</a>
-          
+          <div>Distance: {distance} miles</div>
           <div className={classes.phone}>
             <a href={'tel:' + phone} style={{color: 'white', padding: 4}}><Phone/></a>
             <Typography style={{paddingRight: 20}} variant='h6'>{phone}</Typography> 
@@ -107,17 +109,17 @@ export default function Shelter(props) {
           </Button>
         </div>
 
-        <div style={{flex: 1, textAlign: 'center', fontWeight: 'bold', lineHeight: 1}}>
-          <div>
-            Open Beds
-            <Typography variant={'h6'}>{availableCapacity} </Typography>
-          </div>
+        {/*<div style={{flex: 1, textAlign: 'center', fontWeight: 'bold', lineHeight: 1}}>*/}
+        {/*  <div>*/}
+        {/*    Open Beds*/}
+        {/*    <Typography variant={'h6'}>{availableCapacity} </Typography>*/}
+        {/*  </div>*/}
 
-          <div style={{marginTop: 15}}>
-            Total Capacity
-            <Typography variant={'h6'}>{totalCapacity} </Typography>
-          </div>
-        </div>
+        {/*  <div style={{marginTop: 15}}>*/}
+        {/*    Total Capacity*/}
+        {/*    <Typography variant={'h6'}>{totalCapacity} </Typography>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
       </div>
       
       <div className={classes.stats}>

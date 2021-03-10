@@ -13,11 +13,13 @@ import {
   MenuList,
   MenuItem,
   FormControlLabel,
-  Checkbox
+  Checkbox,
+  Button
 } from "@material-ui/core";
 import {gql, useQuery} from "@apollo/client";
 import Shelter from "./components/Shelter";
 import {Info, Menu} from '@material-ui/icons';
+import * as geolib from 'geolib';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -31,8 +33,9 @@ const useStyles = makeStyles(() => ({
   },
   cardGroup: {
     display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center'
+    //flexDirection: 'column',
+    justifyContent: 'center',
+    flexWrap: 'wrap'
   },
   warningText: {
     fontSize: "calc(10px + 1vmin)",
@@ -45,6 +48,12 @@ const useStyles = makeStyles(() => ({
     flexGrow: 1,
     display: "flex",
     flexDirection: "row",
+  },
+  centerFilterButton:  {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    margin: '15px 0'
   },
 
 }))
@@ -66,6 +75,8 @@ const GET_SHELTERS = gql`
             allowsFamilyFemale
             allowsSingleFemale
             allowsChildren
+            latitude
+            longitude
         }
     }
 `;
@@ -83,9 +94,9 @@ function App() {
     isFamilyFemale: false,
     isChildren: false
   })
+  const [userLocation, setUserLocation] = useState({});
   const anchorRef = useRef(null);
-  const shelters = (data && data.shelter) || []
-  console.log(JSON.stringify(check))
+  const shelters = (data && data.shelter) || [];
   const filteredShelters = shelters?.filter(shelter => {
     if (!any(value => value === true)(values(check))) {
       return true;
@@ -144,7 +155,6 @@ function App() {
           <Typography variant={'h6'}  color={'secondary'} onClick={handleClick}>
             Domestic Violence <Info />
           </Typography>
-
           <Popper open={!!anchorEl} anchorEl={anchorEl} style={{padding: '0px 20px'}}>
             <Paper>
               <div style={{padding: '10px 10px'}}>Individuals involved in Domestic Violence Situations may have further
@@ -164,6 +174,16 @@ function App() {
     )
   }
 
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) =>{
+      setUserLocation({latitude: position.coords.latitude, longitude: position.coords.longitude});
+    })
+  },[])
+
+  let measureDistance = ((userLocation, shelterLocation) => {
+    return geolib.getDistance(userLocation, shelterLocation, 1);
+  })
+
   return (
     <div>
       <header className={classes.appHeader}>
@@ -182,11 +202,21 @@ function App() {
       </header>
       <DraftOnly/>
       <DomesticViolenceMessage/>
+      <div className={classes.centerFilterButton}>
+        <Button
+          variant={'outlined'}
+          onClick={handleToggle}
+        >
+          Filter
+        </Button>
+      </div>
+
       <div className={classes.cardGroup}>
         {filteredShelters && filteredShelters.map(shelter => {
           return (<Shelter
             shelter={shelter}
             key={shelter.id}
+            distance={Math.round(measureDistance(userLocation, {latitude:shelter.latitude, longitude: shelter.longitude}) * 0.0062137) / 10}
           />)
         })}
       </div>
@@ -265,7 +295,7 @@ function App() {
                       label="Single Female"
                     />
                   </MenuItem>
-                  <MenuItem key={"menu5"}>
+                  <MenuItem key={"menu7"}>
                     <FormControlLabel
                       control={
                         <Checkbox
