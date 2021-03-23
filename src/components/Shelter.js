@@ -93,7 +93,7 @@ export default function Shelter(props) {
         <div style={{flex: 3}}>
           <Typography variant={'h5'}>{name}</Typography>
           <a href={`http://maps.google.com/?q=${location}`} style={{color: 'lightblue'}}>{location}</a>
-          <div>Distance: {distance} miles</div>
+          {!!distance ? <div>Distance: {distance} miles</div> : ""}
           <div className={classes.phone}>
             <a href={'tel:' + phone} style={{color: 'white', padding: 4}}><Phone/></a>
             <Typography style={{paddingRight: 20}} variant='h6'>{phone}</Typography> 
