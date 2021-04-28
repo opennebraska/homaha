@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/homaha/static/css/main.6dea0f05.chunk.css",
+    "main.js": "/homaha/static/js/main.b9975506.chunk.js",
+    "main.js.map": "/homaha/static/js/main.b9975506.chunk.js.map",
+    "runtime-main.js": "/homaha/static/js/runtime-main.fcc5f7d8.js",
+    "runtime-main.js.map": "/homaha/static/js/runtime-main.fcc5f7d8.js.map",
+    "static/js/2.ede0730a.chunk.js": "/homaha/static/js/2.ede0730a.chunk.js",
+    "static/js/2.ede0730a.chunk.js.map": "/homaha/static/js/2.ede0730a.chunk.js.map",
+    "static/js/3.cf5a1f9c.chunk.js": "/homaha/static/js/3.cf5a1f9c.chunk.js",
+    "static/js/3.cf5a1f9c.chunk.js.map": "/homaha/static/js/3.cf5a1f9c.chunk.js.map",
+    "index.html": "/homaha/index.html",
+    "static/css/main.6dea0f05.chunk.css.map": "/homaha/static/css/main.6dea0f05.chunk.css.map",
+    "static/js/2.ede0730a.chunk.js.LICENSE.txt": "/homaha/static/js/2.ede0730a.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.fcc5f7d8.js",
+    "static/js/2.ede0730a.chunk.js",
+    "static/css/main.6dea0f05.chunk.css",
+    "static/js/main.b9975506.chunk.js"
+  ]
+}
