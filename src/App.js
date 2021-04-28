@@ -17,9 +17,11 @@ import {
   Button
 } from "@material-ui/core";
 import {gql, useQuery} from "@apollo/client";
-import Shelter from "./components/Shelter";
 import {Info, Menu} from '@material-ui/icons';
 import * as geolib from 'geolib';
+
+import Shelter from "./components/Shelter";
+
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -55,7 +57,20 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center',
     margin: '15px 0'
   },
-
+  footer: {
+    backgroundColor: 'black',
+    height: '100px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  codeForNebraskaLink: {
+    textDecoration: "none",
+    color: 'white',
+    "&:hover": {
+      color: 'aqua'
+    }
+  }
 }))
 
 const GET_SHELTERS = gql`
@@ -326,6 +341,9 @@ function App() {
           </Grow>
         )}
       </Popper>
+      <footer className={classes.footer}>
+        <a href={'https://www.codefornebraska.org'} target={'_blank'} className={classes.codeForNebraskaLink} >CodeForNebraska.org</a>
+      </footer>
     </div>
   );
 }
